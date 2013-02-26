@@ -1,17 +1,18 @@
 /*
-  ReadAnalogVoltage
- Reads an analog input on pin 0, converts it to voltage, and prints the result to the serial monitor.
- Attach the center pin of a potentiometer to pin A0, and the outside pins to +5V and ground.
- 
- This example code is in the public domain.
+Sensors Implementation
+
+This is code for testing sensors using the arduino.  Also used for honing my skills toward eventual home automation project.
  */
+
 const int numberOfSensors = 3;
-//int sensorValue [numberOfSensors] = {0,0,0};
+const String sensorIdentities[numberOfSensors] = {"Sound", "Light", "Temperature"};
 float voltage[numberOfSensors] = {0,0,0};
 float actualValue[numberOfSensors] = {0,0,0};
-int delaytime = 500;
+
+int delaytime = 500, currentMin = 0;
 short int count = 0;
-unsigned long lastMillis = 0;
+unsigned long currentMil = 0;
+float currentSec = 0;
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
@@ -33,19 +34,32 @@ void loop() {
   
   count++;
   
-  if(millis() % delaytime == 0)
+  currentMil = millis();
+  
+  
+  if(currentMil % delaytime == 0)
   {
-    Serial.print(millis());
-    Serial.print("ms: ");
-      for(int i = 0; i < numberOfSensors; i++)
+    
+    if(currentSec > 60)
     {
+      Serial.print(currentMil / 1000 / 60);
+      Serial.print(" Minutes ");
+    }
+    
+    Serial.print(currentMil % 60 );
+    Serial.print(" Seconds: ");
+    Serial.print();
+    
+    for(int i = 0; i < numberOfSensors; i++)
+    {
+      Serial.print(sensorIdentities[i]);
+      Serial.print(" ");
       Serial.print(actualValue[i] / count);
       Serial.print(" ");
       actualValue[i] = 0;
     }
     
     Serial.println();
-    lastMillis = millis();
     
     count = 0;
   }
