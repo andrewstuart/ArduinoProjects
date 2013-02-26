@@ -5,14 +5,16 @@ This is code for testing sensors using the arduino.  Also used for honing my ski
  */
 
 const int numberOfSensors = 3;
-const String sensorIdentities[numberOfSensors] = {"Sound", "Light", "Temperature"};
+const String sensorId[numberOfSensors] = {"Sound", "Light", "Temperature"};
 float voltage[numberOfSensors] = {0,0,0};
 float actualValue[numberOfSensors] = {0,0,0};
 
 int delaytime = 500, currentMin = 0;
 short int count = 0;
 unsigned long currentMil = 0;
-float currentSec = 0;
+float currentSec = 0, currentMinSec = 0;
+//TODO: Array for last day of history.
+
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
@@ -39,6 +41,7 @@ void loop() {
   
   if(currentMil % delaytime == 0)
   {
+    currentSec = currentMil / 1000.0;
     
     if(currentSec > 60)
     {
@@ -46,16 +49,17 @@ void loop() {
       Serial.print(" Minutes ");
     }
     
-    Serial.print(currentMil % 60 );
-    Serial.print(" Seconds: ");
-    Serial.print();
+    currentMinSec = (currentSec /  60 - floor(currentSec / 60)) * 60;    
+    Serial.print(currentMinSec);
+    Serial.print(" Seconds:");
     
     for(int i = 0; i < numberOfSensors; i++)
     {
-      Serial.print(sensorIdentities[i]);
+      Serial.print(" ");
+      Serial.print(sensorId[i]);
       Serial.print(" ");
       Serial.print(actualValue[i] / count);
-      Serial.print(" ");
+
       actualValue[i] = 0;
     }
     
