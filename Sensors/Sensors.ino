@@ -9,6 +9,8 @@ const int numberOfSensors = 3;
 //int sensorValue [numberOfSensors] = {0,0,0};
 float voltage[numberOfSensors] = {0,0,0};
 float actualValue[numberOfSensors] = {0,0,0};
+int delaytime = 500;
+unsigned long lastMillis = 0;
 // the setup routine runs once when you press reset:
 void setup() {
   // initialize serial communication at 9600 bits per second:
@@ -24,16 +26,24 @@ void loop() {
     voltage[i] = sensorValue[i] * 5.0 / 1023.0;
   }
 
-  actualValue[0] = (2.31 - voltage[0]) * 10;
+  actualValue[0] += abs((2.31 - voltage[0]) * 10);
   actualValue[1] = voltage[1] * 2.0;
   actualValue[2] = (voltage[2] * 100 - 50) * 9.0 / 5.0 + 32.0;
-
-    for(int i = 0; i < numberOfSensors; i++)
-  {
-    Serial.print(actualValue[i]);
-    Serial.print(" ");
-  }
   
-  Serial.println();
+  
+  if(millis() % delaytime == 0)
+  {
+    Serial.print(millis());
+    Serial.print("ms: ");
+      for(int i = 0; i < numberOfSensors; i++)
+    {
+      Serial.print(actualValue[i]);
+      Serial.print(" ");
+    }
+    
+    Serial.println();
+    actualValue[0] = 0;
+    lastMillis = millis();
+  }
 }
 
