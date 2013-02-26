@@ -25,8 +25,8 @@ void loop() {
   }
 
   actualValue[0] = (2.31 - voltage[0]) * 10;
-  actualValue[2] = (100.0 * voltage[1] - 50) * 9 / 5 + 32;
-  actualValue[1] *= 2.0;
+  actualValue[1] = voltage[1] * 2.0;
+  actualValue[2] = (voltage[2] * 100 - 50) * 9.0 / 5.0 + 32.0;
 
     for(int i = 0; i < numberOfSensors; i++)
   {
