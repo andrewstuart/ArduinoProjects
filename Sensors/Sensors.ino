@@ -31,7 +31,7 @@ void loop() {
   }
 
   actualValue[0] += abs((2.31 - voltage[0]) * 10);
-  actualValue[1] += voltage[1] * 2.0;
+  actualValue[1] += voltage[1] * 200.0;
   actualValue[2] += (voltage[2] * 100 - 50) * 9.0 / 5.0 + 32.0;
   
   count++;
